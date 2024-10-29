@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes Conexas</title>
+    <style>
+        /* Estilos básicos de reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Fondo claro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Contenedor principal */
+        .container {
+            text-align: center; /* Centrar texto dentro del contenedor */
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px; /* Aumentar el ancho máximo del contenedor */
+            display: flex; /* Cambiar a flexbox para disposición vertical */
+            flex-direction: column; /* Dirección vertical de los elementos */
+            align-items: center; /* Centrar elementos horizontalmente */
+        }
+
+        /* Título principal */
+        h1 {
+            font-size: 3rem; /* Aumentar el tamaño del título */
+            color: #ff0000; /* Cambiar a color rojo */
+            margin-bottom: 10px; /* Ajustar margen inferior */
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Subtítulo */
+        h2 {
+            font-size: 1.5rem; /* Tamaño de fuente del subtítulo */
+            color: #333; /* Color del subtítulo */
+            margin-bottom: 10px; /* Espacio entre subtítulo y logo */
+        }
+
+        /* Nueva línea para SX41 */
+        .sx41 {
+            font-size: 1.5rem; /* Tamaño de fuente para SX41 */
+            color: #333; /* Color del texto */
+            margin-bottom: 20px; /* Espacio entre SX41 y el logo */
+        }
+
+        /* Docente */
+        .docente {
+            font-size: 1.5rem; /* Tamaño de fuente para el docente (mismo que el subtítulo) */
+            color: #333; /* Color del texto */
+            margin-top: 10px; /* Espacio entre el logo y el docente */
+        }
+
+        /* Imagen del logo */
+        .logo {
+            width: 150px; /* Ajustar el tamaño del logo según sea necesario */
+            height: auto;
+            margin: 20px 0; /* Espacio alrededor del logo */
+        }
+
+        /* Contenedor para botones */
+        .button-container {
+            display: flex; /* Usar flexbox para los botones */
+            justify-content: center; /* Centrar botones horizontalmente */
+            width: 100%; /* Para ocupar todo el ancho del contenedor */
+        }
+
+        /* Botones estilizados */
+        .button {
+            padding: 15px 25px; /* Aumentar el padding para hacer los botones más grandes */
+            margin: 15px; /* Margen uniforme alrededor de los botones */
+            color: #ffffff;
+            background-color: #ff0000; /* Cambiar a color rojo */
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem; /* Aumentar el tamaño de la fuente de los botones */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect para los botones */
+        .button:hover {
+            background-color: #cc0000; /* Cambiar a un rojo más oscuro al pasar el ratón */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COMPONENTES CONEXAS DE UN GRAFO</h1>
+        <h2>Grupo 3 <span class="sx41">SX41</span></h2>
+        <div class="docente">Docente: Jonathan Abrahan Sueros Zarate</div>
+        <img src="{{ url_for('static', filename='imagenesupc/upc.png') }}" alt="UPC" class="logo">
+        <div class="button-container"> <!-- Contenedor para los botones -->
+            <a href="{{ url_for('index') }}" class="button">Ejecutar</a>
+            <a href="{{ url_for('integrantes') }}" class="button">Integrantes</a>
+        </div>
+    </div>
+</body>
+</html>

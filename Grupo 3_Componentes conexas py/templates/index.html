@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Análisis</title>
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo del cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Contenedor principal */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 95%;
+            max-width: 550px;
+            text-align: center;
+        }
+
+        /* Título en rojo */
+        h1 {
+            font-size: 2rem;
+            color: #ff0000;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Imagen del logo */
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 15px 0;
+        }
+
+        /* Etiquetas y campos de entrada */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #333;
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Tabla de matriz de adyacencia */
+        #matriz_container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        td input {
+            width: 35px;
+            text-align: center;
+        }
+
+        /* Botón de inicio en rojo */
+        button[type="submit"] {
+            background-color: #ff0000;
+            color: #ffffff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #cc0000;
+        }
+
+        /* Botón de regreso */
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #ff0000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Componentes Conexas</h1>
+        <img src="{{ url_for('static', filename='imagenesupc/upc.png') }}" alt="UPC" class="logo">
+        {% if error %}
+        <div style="color: red; margin-bottom: 10px;">{{ error }}</div>
+        {% endif %}
+        <form method="POST">
+            <label for="num_nodos">Ingresa el número de Nodos para generar la matriz (8-16):</label>
+            <input type="number" id="num_nodos" name="num_nodos" required min="8" max="16">
+            
+            <label for="metodo">Método de entrada para generar los valores dentro de la matriz:</label>
+            <select id="metodo" name="metodo">
+                <option value="aleatorio">Aleatorio</option>
+                <option value="manual">Manual</option>
+            </select>
+    
+            <div id="nombres_vertices_container">
+                <label for="nombres_vertices">Nombres de los Vértices (separados por comas, ej: A, B, C):</label>
+                <input type="text" id="nombres_vertices" name="nombres_vertices" placeholder="A, B, C, ...">
+            </div>
+    
+            <div id="matriz_container" style="display:none;">
+                <h2>Matriz de Adyacencia ( ingresa solo los valores (0 o 1)):</h2>
+                <table>
+                    <tbody id="matriz"></tbody>
+                </table>
+            </div>
+
+            <button type="submit">Iniciar Análisis</button>
+            <a href="/" class="btn-back">Regresar al Inicio</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('metodo').addEventListener('change', function() {
+            const metodo = this.value;
+            const matrizContainer = document.getElementById('matriz_container');
+            if (metodo === 'manual') {
+                let n = document.getElementById('num_nodos').value;
+                if (n) {
+                    matrizContainer.style.display = 'block';
+                    let matrizHtml = '';
+                    for (let i = 0; i < n; i++) {
+                        matrizHtml += '<tr>';
+                        for (let j = 0; j < n; j++) {
+                            matrizHtml += `<td><input type="number" name="elemento_${i}_${j}" min="0" max="1" required></td>`;
+                        }
+                        matrizHtml += '</tr>';
+                    }
+                    document.getElementById('matriz').innerHTML = matrizHtml;
+                }
+            } else {
+                matrizContainer.style.display = 'none';
+                document.getElementById('matriz').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Análisis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Enlazar a CSS opcional -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Fondo claro */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative; /* Necesario para posicionar el logo */
+        }
+
+        h1 {
+            color: #ff0000; /* Color rojo */
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #333; /* Color del subtítulo */
+        }
+
+        img {
+            max-width: 100%; /* Asegura que las imágenes no excedan el ancho */
+            height: auto;
+            margin: 10px 0;
+        }
+
+        ul {
+            list-style-type: none; /* Quitar viñetas */
+            padding: 0; /* Quitar padding */
+            margin: 20px 0; /* Margen para separar listas */
+        }
+
+        li {
+            margin: 5px 0; /* Espacio entre los elementos de la lista */
+        }
+
+        .button-container {
+            margin: 20px 0; /* Espacio alrededor del contenedor de botones */
+        }
+
+        .button {
+            padding: 10px 15px; /* Aumentar el padding para hacer los botones más grandes */
+            margin: 5px; /* Margen uniforme alrededor de los botones */
+            color: #ffffff;
+            background-color: #ff0000; /* Color rojo */
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem; /* Tamaño de la fuente de los botones */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect para los botones */
+        .button:hover {
+            background-color: #cc0000; /* Cambiar a un rojo más oscuro al pasar el ratón */
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none; /* Ocultar secciones por defecto */
+        }
+
+        .description {
+            margin: 10px 0;
+            font-style: italic; /* Estilo de la descripción */
+            color: #555; /* Color gris para el texto de descripción */
+        }
+
+        #finalMessage {
+            display: none; /* Ocultar el mensaje final por defecto */
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333; /* Color del mensaje final */
+            text-align: center; /* Centrar el texto del mensaje final */
+        }
+
+        /* Estilo para el logo */
+        .logo {
+            position: absolute; /* Posicionamiento absoluto */
+            top: 20px; /* Ajustar según sea necesario */
+            right: 20px; /* Ajustar según sea necesario */
+            width: 100px; /* Ajustar el tamaño del logo según sea necesario */
+        }
+
+        /* Estilo para la imagen de agradecimiento */
+        .thank-you-image {
+            width: 150px; /* Ajustar el tamaño de la imagen de agradecimiento */
+            margin: 20px 0; /* Margen alrededor de la imagen */
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='imagenesupc/upc.png') }}" alt="UPC" class="logo"> <!-- Logo en la esquina superior derecha -->
+
+    <h1>Resultados del Análisis</h1>
+
+    <div id="step1">
+        <h2>Matriz con Diagonal Asegurada:</h2>
+        <img src="data:image/png;base64,{{ matriz_diagonal_img }}" alt="Matriz con Diagonal Asegurada">
+        <p class="description">Paso 1: Se agregan 1s a la diagonal principal de ser necesario.</p>
+    </div>
+
+    <div id="step2" class="hidden">
+        <h2>Matriz de Caminos:</h2>
+        <img src="data:image/png;base64,{{ matriz_caminos_img }}" alt="Matriz de Caminos">
+        <p class="description">Paso 2: Calculamos la matriz de caminos.</p>
+    </div>
+
+    <div id="step3" class="hidden">
+        <h2>Matriz Filas Ordenadas:</h2>
+        <img src="data:image/png;base64,{{ matriz_ordenada_filas_img }}" alt="Matriz Filas Ordenadas">
+        <p class="description">Paso 3: Ordenamos las filas según el número de 1s que contiene (de mayor a menor).</p>
+    </div>
+
+    <div id="step4" class="hidden">
+        <h2>Matriz Filas y Columnas Ordenadas:</h2>
+        <img src="data:image/png;base64,{{ matriz_filas_columnas_ordenadas_img }}" alt="Matriz Filas y Columnas Ordenadas">
+        <p class="description">Paso 4: Ordenamos las columnas según el orden de las filas.</p>
+    </div>
+
+    <div id="step5" class="hidden">
+        <h2>Componentes Conexas:</h2>
+        <ul>
+            {% for componente in componentes %}
+                <li>Componente {{ loop.index }}: 
+                    [
+                    {% for nodo in componente %}
+                        {{ vertices_nombres[nodo] }}{% if not loop.last %}, {% endif %} 
+                    {% endfor %}
+                    ]
+                </li>
+                <img src="data:image/png;base64,{{ grafo_graficas[loop.index0] }}" alt="Grafo Componente Conexa {{ loop.index }}">
+            {% endfor %}
+        </ul>
+        <p class="description">Paso 5: Las componentes conexas serán aquellas que se formen con los bloques cuadrados diagonales formados por 1s.</p>
+        <p class="description">La imagen muestra agrupaciones conectadas, donde los vértices resaltan las relaciones directas entre nodos, facilitando la comprensión de las interconexiones dentro de la red.</p>
+    </div>
+
+
+    <div class="button-container">
+        <button id="prevButton" class="button" onclick="changeStep(-1)">Anterior</button>
+        <button id="nextButton" class="button" onclick="changeStep(1)">Siguiente</button>
+    </div>
+
+    <div id="finalMessage" class="hidden">
+        <p>Has llegado al final de los resultados. Puedes volver al inicio para realizar otro ingreso.</p>
+        <img src="{{ url_for('static', filename='imagenesupc/gracias.png') }}" alt="Gracias" class="thank-you-image"> <!-- Imagen de agradecimiento -->
+    </div>
+
+    <a href="{{ url_for('index') }}" class="button">Volver</a>
+
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll('div[id^="step"]');
+        const finalMessage = document.getElementById('finalMessage');
+        
+        function updateVisibility() {
+            steps.forEach((step, index) => {
+                step.classList.toggle('hidden', index !== currentStep);
+            });
+            document.getElementById('prevButton').style.display = currentStep === 0 ? 'none' : 'inline-block';
+            document.getElementById('nextButton').innerText = currentStep === steps.length - 1 ? 'Finalizar' : 'Siguiente';
+            finalMessage.style.display = currentStep === steps.length ? 'block' : 'none'; // Mostrar mensaje final si es el último paso
+            document.getElementById('nextButton').style.display = currentStep === steps.length ? 'none' : 'inline-block'; // Ocultar el botón si es el último paso
+        }
+
+        function changeStep(direction) {
+            currentStep += direction;
+            if (currentStep < 0) currentStep = 0;
+            if (currentStep > steps.length) {
+                currentStep = steps.length; // Asegurarse de que no se salga del rango
+            }
+            updateVisibility();
+        }
+
+        updateVisibility(); // Inicializa la visibilidad
+    </script>
+</body>
+</html>
